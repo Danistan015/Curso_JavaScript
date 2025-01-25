@@ -24,13 +24,30 @@ body {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 35px 0px 35px 0px;
+  border-radius: 35px 0px 35px 0px; /* Bordes redondeados personalizados */
   -moz-border-radius: 35px 0px 35px 0px;
   -webkit-border-radius: 35px 0px 35px 0px;
   border: 2px solid #000000;
-
 }
 
+.header {
+  display: flex;
+  align-items: center; /* Centra el logo y el título verticalmente */
+  justify-content: center; /* Centra el logo y el título horizontalmente */
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin: 0 0 0 10px; /* Espacio solo a la izquierda del título */
+  font-size: 1.8rem; /* Tamaño del título */
+}
+
+.logo {
+  width: 150px; /* Tamaño del logo */
+  height: auto; /* Mantiene las proporciones */
+}
+
+/* Estilo para el botón */
 button {
   font-family: Verdana, Geneva, Tahoma, sans-serif; /* Fuente personalizada */
   font-size: 16px; /* Tamaño de la fuente */

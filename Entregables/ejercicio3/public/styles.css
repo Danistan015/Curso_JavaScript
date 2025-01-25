@@ -1,7 +1,7 @@
 /* Estilo general para el body */
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif; /* Fuente personalizada */
-    font-size: 16px; /* Tamaño de la fuente */
+    font-size: 20px; /* Tamaño de la fuente */
     font-weight: 400; /* Peso normal */
     line-height: 1.6; /* Espaciado entre líneas */
     text-transform: capitalize; /* Capitaliza la primera letra de cada palabra */
@@ -16,6 +16,11 @@ body {
   
   /* Contenedor principal */
   .container {
+    font-family: Verdana, Geneva, Tahoma, sans-serif; /* Fuente personalizada */
+    font-size: 20px; /* Tamaño de la fuente */
+    font-weight: 400; /* Peso normal */
+    line-height: 1.6; /* Espaciado entre líneas */
+    text-transform: capitalize; /* Capitaliza la primera letra de cada palabra */
     width: 80%;
     max-width: 600px;
     background: #ffee02; /* Fondo amarillo */
@@ -25,6 +30,22 @@ body {
     -webkit-border-radius: 35px 0px 35px 0px;
     border: 2px solid #202020; /* Borde oscuro */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .header {
+    display: flex;
+    align-items: center; /* Centra el logo y título verticalmente */
+    margin-bottom: 20px; /* Espacio debajo del encabezado */
+  }
+  
+  .header h1 {
+    margin: 0 0 0 10px; /* Espacio solo a la izquierda del título */
+    font-size: 1.8rem; /* Tamaño del título */
+  }
+  
+  .logo {
+    width: 150px; /* Ajusta el tamaño del logo */
+    height: auto; /* Mantiene las proporciones */
   }
   
   /* Estilo para los textarea */
@@ -56,24 +77,5 @@ body {
   button:hover {
     background: #D6D6D6; /* Fondo gris claro en hover */
     color: black; /* Texto negro en hover */
-  }
-  
-  /* Estilo para el encabezado */
-  .header {
-    display: flex; /* Organiza el título y el logo en una fila */
-    align-items: center; /* Alinea los elementos verticalmente */
-    justify-content: center; /* Centra horizontalmente */
-    margin-bottom: 20px; /* Espacio inferior */
-  }
-  
-  .header h1 {
-    margin: 0; /* Quita el margen predeterminado del título */
-    margin-right: 10px; /* Espacio entre el título y el logo */
-    font-size: 1.8rem; /* Tamaño del título */
-  }
-  
-  .header .logo {
-    width: 120px; /* Ajusta el tamaño del logo */
-    height: auto; /* Mantiene las proporciones */
   }
   

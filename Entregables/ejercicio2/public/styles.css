@@ -1,0 +1,50 @@
+body {
+  font-family: Verdana, Geneva, Tahoma, sans-serif; /* Fuente personalizada */
+  font-size: 16px; /* Tamaño de la fuente */
+  font-weight: 500; /* Peso de la fuente aumentado */
+  line-height: 1.6; /* Espaciado entre líneas */
+  text-transform: capitalize; /* Capitaliza la primera letra de cada palabra */
+  background-color: #333533;
+  color: #000000;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  font-family: Verdana, Geneva, Tahoma, sans-serif; /* Fuente personalizada */
+  font-size: 16px; /* Tamaño de la fuente */
+  font-weight: 500; /* Peso de la fuente aumentado */
+  line-height: 1.6; /* Espaciado entre líneas */
+  text-align: center;
+  background: #ffee02;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 35px 0px 35px 0px;
+  -moz-border-radius: 35px 0px 35px 0px;
+  -webkit-border-radius: 35px 0px 35px 0px;
+  border: 2px solid #000000;
+
+}
+
+button {
+  font-family: Verdana, Geneva, Tahoma, sans-serif; /* Fuente personalizada */
+  font-size: 16px; /* Tamaño de la fuente */
+  font-weight: 500; /* Peso de la fuente aumentado */
+  line-height: 1.6; /* Espaciado entre líneas */
+  background: #FFD100;
+  color: #202020;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background: #D6D6D6;
+}

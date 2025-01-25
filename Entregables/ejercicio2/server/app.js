@@ -1,70 +1,99 @@
-require('dotenv').config();
-
 const express = require('express');
-const bodyParser = require('body-parser');
-const axios = require('axios');
+const fetch = require('node-fetch');
+const path = require('path');
 
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-// Configuración de Gemini API
-const geminisApiKey = process.env.GEMINI_API_KEY;
+// Sirve los archivos estáticos desde el directorio public
+app.use(express.static(path.join(__dirname, '../public')));
 
-// Middleware
-app.use(bodyParser.json());
-app.use(express.static('public'));
+// Mapeo de códigos de clima (por ejemplo, para Open-Meteo)
+const weatherCodeDescriptions = {
+  0: 'Despejado',
+  1: 'Mayormente despejado',
+  2: 'Parcialmente nublado',
+  3: 'Nublado',
+  45: 'Neblina',
+  48: 'Escarcha',
+  51: 'Lluvia ligera',
+  53: 'Lluvia moderada',
+  55: 'Lluvia intensa',
+  61: 'Chubascos ligeros',
+  63: 'Chubascos moderados',
+  65: 'Chubascos intensos',
+  80: 'Tormenta ligera',
+  81: 'Tormenta moderada',
+  82: 'Tormenta intensa',
+};
 
-// Endpoint para resumir texto
-app.post('/summarize', async (req, res) => {
-  const { text } = req.body;
-  if (!text) {
-    return res.status(400).json({ error: 'Text is required' });
-  }
-
+// Ruta para obtener el clima
+app.get('/api/clima', async (req, res) => {
   try {
-    // Configuración para la solicitud a la API de Gemini
-    const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminisApiKey}`,
-      {
-        contents: [
-          {
-            parts: [
-              {
-                text: `Por favor, resume el siguiente texto en español: ${text}`, // Ajustado para español
-              },
-            ],
-          },
-        ],
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    // Usa Promise.race para seleccionar la API más rápida
+    const responses = await Promise.race([
+      fetch("https://api.open-meteo.com/v1/forecast?latitude=6.25184&longitude=-75.56359&current_weather=true"),
+      fetch("https://wttr.in/Medellín?format=j1"),
+      fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=6.25184&lon=-75.56359"),
+    ]);
 
-    // Revisar toda la respuesta de la API
-    console.log('Respuesta de la API:', response.data);
+    const data = await responses.json();
 
-    // Verificar candidatos y extraer el contenido
-    const candidates = response.data.candidates;
-    if (candidates && candidates.length > 0) {
-      const firstCandidate = candidates[0];
-      const summary = firstCandidate.content?.parts?.[0]?.text || 'No summary provided'; // Ajustamos el acceso
+    // Log para depurar el formato de los datos recibidos
+    console.log('Datos recibidos de la API:', JSON.stringify(data, null, 2));
 
-      // Devolver el resumen al cliente
-      return res.json({ summary });
+    // Extrae los datos de temperatura, descripción, humedad y demás
+    const temperature =
+      data.current_weather?.temperature || // Open-Meteo
+      data.weather?.current_condition?.[0]?.temp_C || // Wttr.in
+      null;
+
+    const description =
+      weatherCodeDescriptions[data.current_weather?.weathercode] || // Mapeo Open-Meteo
+      data.weather?.current_condition?.[0]?.weatherDesc?.[0]?.value || // Wttr.in
+      null;
+
+    const wind_speed =
+      data.current_weather?.windspeed ||
+      data.weather?.current_condition?.[0]?.windspeed ||
+      null;
+
+    const last_update =
+      data.current_weather?.time ||
+      data.weather?.current_condition?.[0]?.localObsDateTime ||
+      null;
+
+    // Prepara el objeto con solo los campos disponibles
+    const result = {};
+
+    // Solo agrega la temperatura si está disponible
+    if (temperature !== null) {
+      result.temperature = `${temperature}°C`;
     }
 
-    // Si no se encuentra un resumen válido
-    res.status(500).json({ error: 'Summary not found in API response' });
+    // Solo agrega la descripción si está disponible
+    if (description !== null) {
+      result.description = description;
+    }
+
+    // Solo agrega la velocidad del viento si está disponible
+    if (wind_speed !== null) {
+      result.wind_speed = `${wind_speed} km/h`;
+    }
+
+    // Solo agrega la última actualización si está disponible
+    if (last_update !== null) {
+      result.last_update = last_update;
+    }
+
+    res.json(result);
   } catch (error) {
-    console.error('Error al interactuar con la API de Geminis:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Failed to generate summary' });
+    console.error('Error al obtener los datos del clima:', error);
+    res.status(500).json({ error: 'Error al obtener los datos del clima' });
   }
 });
 
 // Inicia el servidor
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

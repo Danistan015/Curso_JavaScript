@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const axios = require('axios');
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Configuración de Gemini API
 const geminisApiKey = process.env.GEMINI_API_KEY;
